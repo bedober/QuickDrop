@@ -1,2 +1,86 @@
-import { Wallet, Heart, MapPin, Package, ChevronRight, Clock3 } from 'lucide-react';
-export default function Account(){return <main className="mx-auto max-w-6xl px-5 pb-16"><div className="mb-8"><p className="text-sm font-bold text-leaf">CUSTOMER ACCOUNT</p><h1 className="mt-1 text-4xl font-black">Hello, Alex 👋</h1><p className="mt-2 text-slate-500">Manage your QuickDrop experience.</p></div><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4"><div className="card bg-leaf p-5 text-white"><Wallet/><p className="mt-6 text-sm text-white/70">Wallet balance</p><h2 className="mt-1 text-2xl font-black">UGX 84,500</h2><button className="mt-4 rounded-xl bg-lime px-3 py-2 text-sm font-bold text-leaf">Add money</button></div>{[['📦','Orders & rides','12 completed'],['📍','Saved addresses','Home · Work'],['❤️','Favorites','8 places']].map(x=><div className="card p-5" key={x[1]}><span className="text-2xl">{x[0]}</span><h3 className="mt-5 font-black">{x[1]}</h3><p className="mt-1 text-sm text-slate-500">{x[2]}</p><ChevronRight className="mt-5 text-slate-400" size={18}/></div>)}</div><div className="card mt-6 p-6"><div className="flex items-center justify-between"><h2 className="text-xl font-black">Recent activity</h2><span className="text-sm font-bold text-leaf">See all</span></div>{[['QD-1048','Ride to Acacia Mall','UGX 6,500','Today · 10:42'],['QD-1039','The Garden Grill','UGX 28,000','Yesterday · 19:20'],['QD-1022','Courier to Makerere','UGX 5,000','18 Sep · 14:05']].map(x=><div className="flex items-center gap-4 border-b border-black/5 py-5 last:border-0" key={x[0]}><div className="grid h-11 w-11 place-items-center rounded-2xl bg-lime/50"><Package size={19}/></div><div className="flex-1"><b>{x[1]}</b><p className="mt-1 text-xs text-slate-500">{x[0]} · {x[3]}</p></div><b>{x[2]}</b></div>)}</div></main>}
+import { ArrowLeft, Bike, Check, MessageCircle, Phone, ShieldAlert, Star } from 'lucide-react';
+import Link from 'next/link';
+
+export default function Tracking({ params }: { params: { id: string } }) {
+  return (
+    <main className="mx-auto max-w-5xl px-5 pb-16">
+      <Link href="/" className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-slate-500">
+        <ArrowLeft size={16} /> Back home
+      </Link>
+
+      <div className="mb-7 flex items-end justify-between">
+        <div>
+          <p className="text-sm font-bold text-leaf">ORDER {params.id}</p>
+          <h1 className="mt-1 text-4xl font-black">Your rider is on the way</h1>
+        </div>
+        <span className="pill bg-lime text-leaf">Arriving in 8 min</span>
+      </div>
+
+      <div className="grid gap-5 lg:grid-cols-[1.2fr_.8fr]">
+        <div
+          className="relative min-h-[420px] overflow-hidden rounded-[2rem] bg-[#dcead8] p-5"
+          style={{
+            backgroundImage:
+              'linear-gradient(35deg,transparent 45%,#fff 46%,#fff 48%,transparent 49%),linear-gradient(125deg,transparent 45%,#fff 46%,#fff 48%,transparent 49%)',
+            backgroundSize: '90px 90px',
+          }}
+        >
+          <div className="absolute left-[15%] top-[25%] h-44 w-44 rounded-full border-2 border-leaf/30" />
+          <div className="absolute left-[35%] top-[32%] rounded-full bg-leaf p-4 text-white shadow-lg">
+            <Bike />
+          </div>
+          <div className="absolute bottom-[23%] right-[20%] rounded-full bg-orange-500 p-3 text-white">
+            <span className="text-xl">📍</span>
+          </div>
+
+          <div className="absolute bottom-5 left-5 right-5 rounded-2xl bg-white/90 p-4">
+            <p className="text-xs text-slate-500">Live location</p>
+            <p className="font-bold">Approaching Kampala Road</p>
+          </div>
+        </div>
+
+        <div className="space-y-5">
+          <div className="card p-5">
+            <div className="flex items-center gap-4">
+              <div className="grid h-14 w-14 place-items-center rounded-full bg-lime text-2xl">👨🏿</div>
+              <div>
+                <h2 className="font-black">John K.</h2>
+                <p className="text-sm text-slate-500">Boda boda · UEX 421B</p>
+                <div className="mt-1 flex items-center gap-1 text-sm">
+                  <Star size={14} className="fill-orange-400 text-orange-400" /> 4.9 · 240 trips
+                </div>
+              </div>
+
+              <div className="ml-auto flex gap-2">
+                <button className="rounded-full bg-lime p-3 text-leaf"><Phone size={17} /></button>
+                <button className="rounded-full bg-slate-100 p-3"><MessageCircle size={17} /></button>
+              </div>
+            </div>
+          </div>
+
+          <div className="card p-5">
+            <h3 className="mb-5 font-black">Trip status</h3>
+            {['Booking confirmed', 'John is on the way', 'Arriving at pickup', 'Trip completed'].map((step, index) => (
+              <div className="flex gap-3 pb-5 last:pb-0" key={step}>
+                <div className={`grid h-6 w-6 shrink-0 place-items-center rounded-full ${index < 2 ? 'bg-leaf text-white' : 'bg-slate-100 text-slate-400'}`}>
+                  {index < 2 ? <Check size={14} /> : <span className="h-2 w-2 rounded-full bg-slate-300" />}
+                </div>
+                <div>
+                  <p className={`text-sm font-bold ${index < 2 ? '' : 'text-slate-400'}`}>{step}</p>
+                  {index === 1 && <p className="text-xs text-slate-500">Updated just now</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex gap-3">
+            <button className="flex-1 rounded-2xl border border-red-200 bg-red-50 py-3 text-sm font-bold text-red-600">
+              <ShieldAlert className="mr-2 inline" size={16} /> SOS
+            </button>
+            <button className="flex-1 rounded-2xl border border-black/10 bg-white py-3 text-sm font-bold">Tip rider</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
