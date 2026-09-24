@@ -1,0 +1,3 @@
+import { Schema, models, model } from 'mongoose';
+const RideSchema=new Schema({user:{type:Schema.Types.ObjectId,ref:'User',required:true},rider:{type:Schema.Types.ObjectId,ref:'RiderProfile'},pickup:{address:String,lat:Number,lng:Number},dropoff:{address:String,lat:Number,lng:Number},distance:{type:Number,required:true},fare:{type:Number,required:true},status:{type:String,enum:['searching','rider_found','on_the_way','in_progress','completed'],default:'searching'},vehicleType:{type:String,enum:['Boda Boda','TukTuk','Car'],required:true}},{timestamps:true});
+export default models.Ride||model('Ride',RideSchema);
