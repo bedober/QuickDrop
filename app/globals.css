@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { --ink:#102a23; --muted:#6d7d77; --cream:#f8faf6; --lime:#c7f36b; --green:#0d5c48; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--cream); color:var(--ink); font-family:Arial, Helvetica, sans-serif; }
+button,input,select { font:inherit; }
+@layer components {
+ .card { @apply rounded-3xl bg-white border border-black/[.06] shadow-[0_10px_40px_rgba(16,42,35,.06)]; }
+ .pill { @apply rounded-full px-4 py-2 text-sm font-semibold; }
+ .field { @apply w-full rounded-2xl border border-black/10 bg-[#f7f9f5] px-4 py-3 outline-none focus:border-[#0d5c48]; }
+ .btn-primary { @apply rounded-2xl bg-[#0d5c48] px-5 py-3 font-bold text-white transition hover:bg-[#084635]; }
+}

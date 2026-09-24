@@ -1,0 +1,12 @@
+import express from 'express';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+const app=express(); const http=createServer(app); const io=new Server(http,{cors:{origin:'*'}}); app.use(express.json());
+const quote=(km:number,base=3000)=>({currency:'UGX',distanceKm:km,fee:base+Math.ceil(km)*1000,etaMinutes:Math.ceil(km*5)+10});
+app.get('/api/health',(_,res)=>res.json({ok:true,service:'quickdrop-ug'}));
+app.get('/api/courier/quote',(req,res)=>res.json(quote(Number(req.query.km)||2)));
+app.get('/api/ride/quote',(req,res)=>res.json(quote(Number(req.query.km)||4,4000)));
+app.post('/api/ride/book',(req,res)=>res.status(201).json({id:'QD-'+Date.now().toString().slice(-6),status:'searching',...req.body}));
+app.get('/api/food',(_,res)=>res.json({restaurants:6}));
+io.on('connection',socket=>{socket.on('join-trip',id=>socket.join(`trip:${id}`)); socket.on('location-update',data=>io.to(`trip:${data.tripId}`).emit('location-update',data)); socket.on('chat',data=>io.to(`trip:${data.tripId}`).emit('chat',data));});
+http.listen(process.env.PORT||4000,()=>console.log('QuickDrop API running on :4000'));
