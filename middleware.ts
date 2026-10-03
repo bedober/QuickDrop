@@ -16,8 +16,14 @@ export function middleware(request: NextRequest) {
   }
 
   if (isCustomer) {
-    const userToken = request.cookies.get('authToken')?.value;
-    if (!userToken) return NextResponse.redirect(new URL('/login', request.url));
+    const userToken =
+      request.cookies.get('authToken')?.value ||
+      request.cookies.get('next-auth.session-token')?.value ||
+      request.cookies.get('__Secure-next-auth.session-token')?.value;
+
+    if (!userToken) {
+      return NextResponse.redirect(new URL('/login?next=' + encodeURIComponent(pathname), request.url));
+    }
   }
 
   return NextResponse.next();
