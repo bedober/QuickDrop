@@ -1,10 +1,11 @@
+import { getToken } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const customerPaths = ['/account', '/my-orders', '/tracking', '/courier'];
 const publicPaths = ['/login', '/signup', '/'];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isPublic = publicPaths.some(path => pathname === path || pathname.startsWith(path + '/'));
   const isCustomer = customerPaths.some(path => pathname === path || pathname.startsWith(path + '/'));
@@ -16,12 +17,12 @@ export function middleware(request: NextRequest) {
   }
 
   if (isCustomer) {
-    const userToken =
-      request.cookies.get('authToken')?.value ||
-      request.cookies.get('next-auth.session-token')?.value ||
-      request.cookies.get('__Secure-next-auth.session-token')?.value;
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
 
-    if (!userToken) {
+    if (!token) {
       return NextResponse.redirect(new URL('/login?next=' + encodeURIComponent(pathname), request.url));
     }
   }
