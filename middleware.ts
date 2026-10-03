@@ -4,8 +4,7 @@ import type { NextRequest } from 'next/server';
 const customerPaths = ['/account', '/my-orders', '/tracking', '/courier'];
 const publicPaths = ['/login', '/signup', '/'];
 
-function getRequiredRole(pathname: string): 'admin' | 'rider' | 'customer' | null {
-  if (pathname === '/admin' || pathname.startsWith('/admin/')) return 'admin';
+function getRequiredRole(pathname: string): 'rider' | 'customer' | null {
   if (pathname === '/rider' || pathname.startsWith('/rider/')) return 'rider';
   if (customerPaths.some(path => pathname === path || pathname.startsWith(path + '/'))) return 'customer';
   return null;
@@ -26,7 +25,7 @@ export function middleware(request: NextRequest) {
     if (!userToken) return NextResponse.redirect(new URL('/login', request.url));
 
     if (userRole !== requiredRole) {
-      const dashboardMap: Record<string, string> = { admin: '/admin', rider: '/rider', customer: '/account' };
+      const dashboardMap: Record<string, string> = { rider: '/rider', customer: '/account' };
       return NextResponse.redirect(new URL(dashboardMap[userRole] || '/login', request.url));
     }
   }
