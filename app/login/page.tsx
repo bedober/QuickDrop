@@ -5,9 +5,8 @@ import { ShieldCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const roles = [
-  { key: 'customer', label: 'Customer', description: 'Food, courier, rides and tracking', destination: '/account' },
-  { key: 'rider', label: 'Rider', description: 'Accept jobs and manage earnings', destination: '/rider' },
-  { key: 'admin', label: 'Admin', description: 'Manage the QuickDrop operation', destination: '/admin' },
+  { key: 'customer', label: 'Customer', description: 'Parcel pickup, delivery and tracking', destination: '/account' },
+  { key: 'rider', label: 'Rider', description: 'Accept parcel jobs and manage earnings', destination: '/rider' },
 ] as const;
 
 export default function LoginPage() {
