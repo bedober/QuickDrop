@@ -1,18 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { Chrome, Facebook, Music2, ShieldCheck } from 'lucide-react';
 
 export default function LoginPage() {
-  const router = useRouter();
-  const { status } = useSession();
-
-  useEffect(() => {
-    if (status === 'authenticated') router.replace('/account');
-  }, [status, router]);
-
   const callbackUrl =
     new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '').get('next') || '/account';
 
@@ -38,7 +29,7 @@ export default function LoginPage() {
         </div>
 
         <p className="mt-5 text-center text-xs text-slate-500">
-          Your social account is used only to authenticate your QuickDrop customer account.
+          Choose a social account to authenticate your QuickDrop customer account.
         </p>
       </div>
     </main>
