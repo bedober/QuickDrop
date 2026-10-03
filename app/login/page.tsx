@@ -1,37 +1,15 @@
 'use client';
-
+import { FormEvent,useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { Chrome, Facebook, Music2, ShieldCheck } from 'lucide-react';
-
-export default function LoginPage() {
-  const callbackUrl =
-    new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '').get('next') || '/account';
-
-  return (
-    <main className="mx-auto max-w-xl px-5 pb-16 pt-8">
-      <div className="card p-6 sm:p-8">
-        <div className="grid h-14 w-14 place-items-center rounded-2xl bg-lime text-leaf">
-          <ShieldCheck />
-        </div>
-        <h1 className="mt-6 text-3xl font-black">Welcome to QuickDrop UG</h1>
-        <p className="mt-2 text-slate-500">Sign in to book parcels, manage deliveries and track orders.</p>
-
-        <div className="mt-7 grid gap-3">
-          <button onClick={() => signIn('google', { callbackUrl })} className="btn-primary flex w-full items-center justify-center gap-3">
-            <Chrome size={20} /> Continue with Google
-          </button>
-          <button onClick={() => signIn('facebook', { callbackUrl })} className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 font-bold text-slate-800">
-            <Facebook size={20} /> Continue with Facebook
-          </button>
-          <button onClick={() => signIn('tiktok', { callbackUrl })} className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 font-bold text-slate-800">
-            <Music2 size={20} /> Continue with TikTok
-          </button>
-        </div>
-
-        <p className="mt-5 text-center text-xs text-slate-500">
-          Choose a social account to authenticate your QuickDrop customer account.
-        </p>
-      </div>
-    </main>
-  );
+import Link from 'next/link';
+import {Chrome,Facebook,Music2,ShieldCheck,Mail,LockKeyhole} from 'lucide-react';
+export default function LoginPage(){
+ const [error,setError]=useState(''); const [loading,setLoading]=useState(false);
+ const callbackUrl=new URLSearchParams(typeof window!=='undefined'?window.location.search:'').get('next')||'/account';
+ async function submit(e:FormEvent<HTMLFormElement>){e.preventDefault();setError('');setLoading(true);const f=new FormData(e.currentTarget);const r=await signIn('credentials',{email:String(f.get('email')),password:String(f.get('password')),redirect:false,callbackUrl});setLoading(false);if(r?.error)setError('Invalid email or password.');else if(r?.url)window.location.href=r.url;}
+ return <main className="mx-auto max-w-xl px-5 pb-16 pt-8"><div className="card p-6 sm:p-8"><div className="grid h-14 w-14 place-items-center rounded-2xl bg-lime text-leaf"><ShieldCheck/></div><h1 className="mt-6 text-3xl font-black">Welcome to QuickDrop UG</h1><p className="mt-2 text-slate-500">Sign in to book parcels, manage deliveries and track orders.</p>
+ <form onSubmit={submit} className="mt-7 space-y-4"><label className="block"><span className="mb-2 block text-sm font-bold">Email</span><div className="relative"><Mail className="absolute left-3 top-3.5 text-slate-400" size={18}/><input name="email" type="email" required className="w-full rounded-xl border border-slate-200 py-3 pl-10 pr-3" placeholder="you@example.com"/></div></label><label className="block"><span className="mb-2 block text-sm font-bold">Password</span><div className="relative"><LockKeyhole className="absolute left-3 top-3.5 text-slate-400" size={18}/><input name="password" type="password" required minLength={6} className="w-full rounded-xl border border-slate-200 py-3 pl-10 pr-3" placeholder="Your password"/></div></label>{error&&<p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">{error}</p>}<button disabled={loading} className="btn-primary w-full">{loading?'Signing in…':'Sign in'}</button></form>
+ <div className="my-6 flex items-center gap-3 text-xs text-slate-400"><span className="h-px flex-1 bg-slate-200"/><span>OR</span><span className="h-px flex-1 bg-slate-200"/></div>
+ <div className="grid gap-3"><button onClick={()=>signIn('google',{callbackUrl})} className="btn-primary flex w-full items-center justify-center gap-3"><Chrome size={20}/> Google</button><button onClick={()=>signIn('facebook',{callbackUrl})} className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 font-bold"><Facebook size={20}/> Facebook</button><button onClick={()=>signIn('tiktok',{callbackUrl})} className="flex w-full items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 font-bold"><Music2 size={20}/> TikTok</button></div>
+ <p className="mt-6 text-center text-sm text-slate-500">New to QuickDrop? <Link href="/signup" className="font-black text-leaf">Create an account</Link></p></div></main>;
 }
