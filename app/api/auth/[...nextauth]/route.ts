@@ -81,26 +81,6 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: { signIn: '/login' },
-  callbacks: {
-    async redirect({ url, baseUrl }) {
-      if (url.startsWith('/')) return baseUrl + url;
-      try {
-        if (new URL(url).origin === baseUrl) return url;
-      } catch {}
-      return baseUrl + '/account';
-    },
-    async jwt({ token, profile, account }) {
-      if (account) token.provider = account.provider;
-      if (profile) token.providerProfile = profile;
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.sub || '';
-      }
-      return session;
-    },
-  },
 };
 
 const handler = NextAuth(authOptions);
