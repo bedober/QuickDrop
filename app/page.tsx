@@ -1,26 +1,39 @@
 'use client';
 
-import { ArrowRight, Bike, MapPin, Package, Search, Star, Utensils, Zap } from 'lucide-react';
+import { ArrowRight, Package, MapPin, ShieldCheck, Truck, Zap } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
-import { restaurants } from '@/app/lib/mock-data';
-
-const tabs = [
-  { label: 'Food Delivery', key: 'food', emoji: '🍽️' },
-  { label: 'Courier Service', key: 'courier', emoji: '📦' },
-  { label: 'Book a Ride', key: 'ride', emoji: '🏍️' },
-] as const;
 
 export default function Home() {
-  const [tab, setTab] = useState<(typeof tabs)[number]['key']>('food');
   return <main className="mx-auto max-w-7xl px-5 lg:px-10">
     <section className="grid items-center gap-10 pb-14 pt-8 lg:grid-cols-[1.05fr_.95fr] lg:pt-14">
-      <div><div className="mb-6 inline-flex items-center gap-2 rounded-full bg-lime/60 px-4 py-2 text-sm font-bold text-leaf"><Zap size={15}/> Kampala&apos;s super app</div><h1 className="max-w-xl text-5xl font-black leading-[.98] tracking-[-.05em] sm:text-7xl">Everything delivered.<br/><span className="text-leaf">Every ride.</span></h1><p className="mt-6 max-w-md text-lg leading-7 text-slate-500">Food, parcels and rides around Kampala — made simple, safe and on time.</p><div className="mt-8 flex flex-wrap gap-3"><Link href="/food" className="btn-primary">Get started <ArrowRight className="ml-2 inline" size={17}/></Link><Link href="/tracking/QD-1048" className="rounded-2xl border border-black/10 bg-white px-5 py-3 font-bold">Track an order</Link></div></div>
-      <div className="relative min-h-[340px] overflow-hidden rounded-[2rem] bg-[#dcead8] p-5 shadow-inner"><div className="absolute inset-0 opacity-40" style={{backgroundImage:'linear-gradient(35deg,transparent 45%,#fff 46%,#fff 48%,transparent 49%),linear-gradient(125deg,transparent 45%,#fff 46%,#fff 48%,transparent 49%)',backgroundSize:'100px 100px'}}/><div className="relative flex justify-between text-xs font-bold text-leaf"><span className="rounded-full bg-white/80 px-3 py-2">LIVE IN KAMPALA</span><span className="rounded-full bg-lime px-3 py-2">12 riders nearby</span></div><div className="absolute left-[33%] top-[32%] rounded-full bg-leaf p-3 text-white shadow-lg"><Bike size={20}/></div><div className="absolute right-[25%] top-[58%] rounded-full bg-orange-500 p-3 text-white shadow-lg"><MapPin size={20}/></div><div className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl bg-white/90 p-4"><div><p className="text-xs text-slate-500">Your area</p><p className="font-bold">Kololo, Kampala</p></div><span className="pill bg-lime text-leaf">~30 min</span></div></div>
+      <div>
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-lime/60 px-4 py-2 text-sm font-bold text-leaf"><Zap size={15}/> Kampala parcel delivery</div>
+        <h1 className="max-w-xl text-5xl font-black leading-[.98] tracking-[-.05em] sm:text-7xl">Send parcels.<br/><span className="text-leaf">Track every delivery.</span></h1>
+        <p className="mt-6 max-w-md text-lg leading-7 text-slate-500">Fast, reliable pickup and delivery for documents, packages and parcels across Kampala.</p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/courier" className="btn-primary">Send a parcel <ArrowRight className="ml-2 inline" size={17}/></Link>
+          <Link href="/tracking/QD-C4821" className="rounded-2xl border border-black/10 bg-white px-5 py-3 font-bold">Track a parcel</Link>
+        </div>
+      </div>
+      <div className="relative min-h-[340px] overflow-hidden rounded-[2rem] bg-[#dcead8] p-5 shadow-inner">
+        <div className="absolute inset-0 opacity-40" style={{backgroundImage:'linear-gradient(35deg,transparent 45%,#fff 46%,#fff 48%,transparent 49%),linear-gradient(125deg,transparent 45%,#fff 46%,#fff 48%,transparent 49%)',backgroundSize:'100px 100px'}}/>
+        <div className="relative flex justify-between text-xs font-bold text-leaf"><span className="rounded-full bg-white/80 px-3 py-2">LIVE DELIVERY NETWORK</span><span className="rounded-full bg-lime px-3 py-2">Parcel tracking</span></div>
+        <div className="absolute left-[33%] top-[32%] rounded-full bg-leaf p-3 text-white shadow-lg"><Truck size={20}/></div>
+        <div className="absolute right-[25%] top-[58%] rounded-full bg-orange-500 p-3 text-white shadow-lg"><MapPin size={20}/></div>
+        <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl bg-white/90 p-4"><div><p className="text-xs text-slate-500">Service area</p><p className="font-bold">Kampala & surrounding areas</p></div><span className="pill bg-lime text-leaf">Fast pickup</span></div>
+      </div>
     </section>
-    <section className="card p-2"><div className="grid grid-cols-3 gap-1">{tabs.map(item=><button key={item.key} onClick={()=>setTab(item.key)} className={`rounded-2xl px-3 py-4 text-sm font-black sm:text-base ${tab===item.key?'bg-leaf text-white':'text-slate-500 hover:bg-slate-50'}`}>{item.emoji} <span className="ml-1">{item.label}</span></button>)}</div>{tab==='food'?<FoodTab/>:tab==='courier'?<CourierTab/>:<RideTab/>}</section>
+    <section className="grid gap-4 md:grid-cols-3">
+      <Feature icon={<Package/>} title="Easy parcel booking" text="Enter pickup, receiver and parcel details in minutes."/>
+      <Feature icon={<Truck/>} title="Reliable pickup" text="A delivery rider collects your parcel and keeps it moving."/>
+      <Feature icon={<ShieldCheck/>} title="Track your parcel" text="Follow delivery status from pickup to successful handover."/>
+    </section>
+    <section className="card mt-8 p-5 sm:p-8">
+      <div className="grid gap-8 lg:grid-cols-2">
+        <div><h2 className="text-2xl font-black">Need to send a parcel?</h2><p className="mt-1 text-slate-500">Get an instant delivery estimate based on distance.</p><Link href="/courier" className="btn-primary mt-6 inline-flex">Create delivery <ArrowRight className="ml-2" size={17}/></Link></div>
+        <div className="rounded-3xl bg-[#eff8e3] p-6"><p className="text-sm font-bold text-leaf">STARTING PRICE</p><p className="mt-2 text-5xl font-black">UGX 4,000</p><p className="mt-2 text-sm text-slate-500">UGX 3,000 base + UGX 1,000 per km</p></div>
+      </div>
+    </section>
   </main>;
 }
-function FoodTab(){return <div className="p-5 sm:p-8"><div className="mb-7 flex flex-wrap items-center justify-between gap-4"><div><h2 className="text-2xl font-black">What are you craving?</h2><p className="mt-1 text-sm text-slate-500">Delivered fresh to Kololo</p></div><label className="flex w-full items-center gap-2 rounded-2xl bg-slate-50 px-4 py-3 text-slate-400 sm:w-64"><Search size={18}/><input className="w-full bg-transparent outline-none" placeholder="Search food..."/></label></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{restaurants.map(r=><article className="group" key={r.id}><div className={`grid h-36 place-items-center rounded-3xl ${r.accent} text-6xl`}>{r.emoji}</div><div className="pt-3"><div className="flex justify-between"><h3 className="font-black">{r.name}</h3><span className="flex items-center gap-1 text-sm font-bold"><Star size={14} className="fill-orange-400 text-orange-400"/>{r.rating}</span></div><p className="mt-1 text-sm text-slate-500">{r.cuisine} · {r.eta}</p></div></article>)}</div></div>}
-function CourierTab(){return <div className="grid gap-8 p-5 sm:p-8 lg:grid-cols-2"><div><h2 className="text-2xl font-black">Send anything, anywhere</h2><p className="mt-1 text-slate-500">Fast, dependable courier service across Kampala.</p><div className="mt-6 space-y-3"><input className="field" placeholder="Pickup address 📍"/><input className="field" placeholder="Dropoff address 📍"/><Link href="/courier" className="btn-primary mt-2 flex w-full justify-center">Open courier booking <ArrowRight className="ml-2" size={17}/></Link></div></div><div className="rounded-3xl bg-[#eff8e3] p-6"><p className="text-sm font-bold text-leaf">INSTANT QUOTE</p><p className="mt-2 text-5xl font-black">UGX 5,000</p><p className="mt-2 text-sm text-slate-500">UGX 3,000 base + UGX 1,000 per km</p></div></div>}
-function RideTab(){return <div className="grid gap-8 p-5 sm:p-8 lg:grid-cols-2"><div><h2 className="text-2xl font-black">Move your way</h2><p className="mt-1 text-slate-500">Safe rides with trusted local drivers.</p><div className="mt-6 space-y-3"><input className="field" placeholder="Pickup address 📍"/><input className="field" placeholder="Dropoff address 📍"/><Link href="/ride" className="btn-primary mt-2 flex w-full justify-center">Book a ride <ArrowRight className="ml-2" size={17}/></Link></div></div><div className="rounded-3xl bg-[#e9f2ef] p-6"><p className="text-sm font-bold text-leaf">FARE ESTIMATE</p><p className="mt-2 text-5xl font-black">UGX 6,500</p><p className="mt-2 text-sm text-slate-500">4.2 km · 12–18 min away</p></div></div>}
+function Feature({icon,title,text}:{icon:React.ReactNode;title:string;text:string}){return <div className="card p-6"><div className="text-leaf">{icon}</div><h2 className="mt-5 font-black">{title}</h2><p className="mt-2 text-sm leading-6 text-slate-500">{text}</p></div>}
